@@ -1,9 +1,9 @@
 #include "add_vector.h"
 #include <iostream>
-#include "cuda/add_vector.cuh"
 
 #include <chrono>
 using namespace std;
+namespace AddVector{
 void addVector() {
     const int dims = 1024;
     const int vectors = 400000;
@@ -28,16 +28,6 @@ void addVector() {
     auto end_cpu   = std::chrono::high_resolution_clock::now();
     double ms_cpu = std::chrono::duration<double, std::milli>(end_cpu - start).count();
     cout << "End vector addition on CPU... " << ms_cpu << " ms" << std::endl;
-    std::cout << "[";
-    for (int i = 0; i < dims; i++) {
-        std::cout << test.output[i] << ", ";
-    }
-    std::cout << "]" << std::endl;
-    std::cout << "---------CPU RESULT--------" << std::endl;
-    std::cout << "[";
-    for (int i = 0; i < dims; i++) {
-        std::cout << test2.output[i] << ", ";
-    }
-    std::cout << "]" << std::endl;
-    return 0;
+    
+}
 }

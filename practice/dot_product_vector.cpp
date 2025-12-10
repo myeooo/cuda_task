@@ -1,6 +1,5 @@
 #include "dot_product_vector.h"
 #include <iostream>
-#include "cuda/dot_product_vector.cuh"
 
 #include <chrono>
 using namespace std;

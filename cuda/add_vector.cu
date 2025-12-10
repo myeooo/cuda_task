@@ -2,7 +2,7 @@
 #include <cuda_runtime.h>
 #include <iostream>
 
-__global__ void addVector(float* c, const float* a, const float* b, int N) {
+__global__ void addVectorCu(float* c, const float* a, const float* b, int N) {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     if(i< N){
         c[i] = a[i] + b[i];
@@ -51,7 +51,7 @@ void addVectorKernel(float* h_c, const float* h_a, const float* h_b, int N)
     int threads = 256;
     int blocks = (N + threads - 1) / threads;
     printf("Blocks: %d, Threads: %d\n", blocks, threads);
-    addVector<<<blocks,threads>>>(d_c, d_a, d_b, N);
+    addVectorCu<<<blocks,threads>>>(d_c, d_a, d_b, N);
     cudaDeviceSynchronize();
 
     cudaMemcpy((void *)h_c, d_c, size, cudaMemcpyDeviceToHost);

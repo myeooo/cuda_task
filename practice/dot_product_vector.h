@@ -1,5 +1,6 @@
 
 #pragma once    
+#include "../cuda/dot_product_vector.cuh"
 #include <vector>
 #include <random>
 #include <chrono>

@@ -1,9 +1,11 @@
 
 #pragma once    
 #include <vector>
+#include "../cuda/add_vector.cuh"
 #include <random>
 #include <chrono>
 using namespace std;
+namespace AddVector{
 struct VectorAddTest {
 
     int dimension;
@@ -22,3 +24,4 @@ struct VectorAddTest {
 };
 
 void addVector();
+}
