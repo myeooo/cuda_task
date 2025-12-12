@@ -1,5 +1,5 @@
 #include <iostream>
-#include "practice/add_vector.h"
+#include "practice/vector_processing.h"
 #include <vector>
 #include <random>
 #include <chrono>
@@ -8,6 +8,6 @@ using namespace std;
 
 
 int main() {
-    AddVector::addVector();
+    VectorAlgorithm::dotProductVectors();
     return 0;
 }

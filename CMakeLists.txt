@@ -13,8 +13,7 @@ file(GLOB CPP_SOURCES
 )
 add_executable(app
     main.cpp
-    practice/add_vector.cpp
-    practice/dot_product_vector.cpp
+    algorithm/vector_processing.cpp
     ${CUDA_SOURCES}
 )
 

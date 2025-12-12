@@ -1,17 +1,19 @@
 
 #pragma once    
-#include "../cuda/dot_product_vector.cuh"
 #include <vector>
+#include "../cuda/add_vector.cuh"
+#include "../cuda/dot_product_vector.cuh"
 #include <random>
 #include <chrono>
 using namespace std;
-struct VectorDotTest {
+namespace VectorAlgorithm{
+struct VectorAddTest {
 
     int dimension;
 
     vector<float> input;
     vector<float> output;
-    VectorDotTest(int dimension, int numberOfVectors) : dimension(dimension) {
+    VectorAddTest(int dimension, int numberOfVectors) : dimension(dimension) {
         input.resize(numberOfVectors * dimension);
         static std::mt19937 rng(std::random_device{}());
         std::uniform_real_distribution<float> dist(0.0f, 12.0f); 
@@ -21,5 +23,6 @@ struct VectorDotTest {
         output.resize(dimension, 0.0f);
     }
 };
-
-void dotProductVector();
+void dotProductVectors();
+void addVector();
+}
