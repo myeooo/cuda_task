@@ -1,7 +1,8 @@
 #pragma once
 #include <cuda/add_vector.cuh>
+#include <iostream>
+using namespace std;
 namespace DataBinding {
-
 extern void** dataInput_d;
 extern void** dataOutput_d;
 
@@ -24,7 +25,8 @@ void launchKernel(KernelFunc kernel, dim3 grid, dim3 block, int size)
         std::cerr << "launchKernel: No output buffer!" << std::endl;
         return;
     }
-
+    std::cout << "Launching kernel with grid (" << grid.x << ", " << grid.y << ", " << grid.z << ") "
+         << "and block (" << block.x << ", " << block.y << ", " << block.z << ")" << std::endl;
     void* args[32];
     int index = 0;
 

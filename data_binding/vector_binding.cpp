@@ -1,6 +1,5 @@
 #include "vector_binding.h"
 #include <cuda_runtime.h>
-#include <iostream>
 
 namespace DataBinding {
 

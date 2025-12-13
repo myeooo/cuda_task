@@ -10,9 +10,8 @@ __global__ void addVectorCu(float* c, const float* a, const float* b, int N) {
 }
 
 __global__ void addMultiDim(float* out, const float* in, int numberOfVectors) {
-    int idx = threadIdx.x;
     int dims = blockDim.x * gridDim.x;
-    out[idx] = 0;
+    int idx = (blockIdx.x * blockDim.x + threadIdx.x);
     for(int i = 0; i < numberOfVectors; i++){
         out[idx] += in[i * dims + idx];
     }
