@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 // Khai báo hàm wrapper chạy kernel
-float dotProductVector(float* c, const float* a, const float* b, int dims);
+__global__ void dotProdVectorCu(float* out, const float* v1, const float* v2, int dims, int stride);
 #ifdef __cplusplus
 }
 #endif

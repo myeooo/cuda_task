@@ -87,4 +87,5 @@ void getOutput(int idx, void* hostPtr)
         cudaMemcpyDeviceToHost
     );
 }
+
 }

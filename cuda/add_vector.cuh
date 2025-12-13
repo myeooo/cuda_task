@@ -6,8 +6,10 @@ extern "C" {
 #endif
 
 // Khai báo hàm wrapper chạy kernel
-void addVectorKernel(float* c, const float* a, const float* b, int N);
-void addVectorMultiDimKernel(float* out, const float* input, int numberOfVectors, int dim);
+__global__ void addVectorCu(float* c, const float* a, const float* b, int N);
+__global__ void addVectorCu2(float* c, const float* a, const float* b, int N);
+
+__global__ void addMultiDim(float* out, const float* in, int numberOfVectors);
 #ifdef __cplusplus
 }
 #endif
