@@ -8,6 +8,6 @@ using namespace std;
 
 
 int main() {
-    VectorAlgorithm::addVectorMultipleDims();
+    VectorAlgorithm::dotProductVector();
     return 0;
 }

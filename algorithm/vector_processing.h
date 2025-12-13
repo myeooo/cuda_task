@@ -10,5 +10,6 @@ namespace VectorAlgorithm{
 
 void addVector2();
 void addVector();
+void dotProductVector();
 void addVectorMultipleDims();
 }
