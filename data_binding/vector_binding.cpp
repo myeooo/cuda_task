@@ -72,6 +72,21 @@ void setInput(int idx, const void* hostPtr)
     );
 }
 
+void setOutput(int idx, const void* hostPtr)
+{
+    if (idx < 0 || idx >= numberOfInputArr_d) {
+        std::cerr << "setInput: invalid index " << idx << std::endl;
+        return;
+    }
+
+    cudaMemcpy(
+        dataOutput_d[idx],
+        hostPtr,
+        outputSize_d[idx] * typeSize_d,
+        cudaMemcpyHostToDevice
+    );
+}
+
 void getOutput(int idx, void* hostPtr)
 {   
     if (idx < 0 || idx >= numberOfOutputArr_d) {

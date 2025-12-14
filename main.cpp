@@ -6,8 +6,11 @@
 
 using namespace std;
 
-
 int main() {
-    VectorAlgorithm::dotProductVector();
+    int numbTest = 10;
+    // VectorAlgorithm::scaleVectorWithConstants();
+    for (int i = 0 ; i < numbTest; i ++){
+        VectorAlgorithm::minLengthVector();
+    }
     return 0;
 }

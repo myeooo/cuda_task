@@ -268,4 +268,187 @@ void dotProductVector() {
     delete[] input2;
 }
 
+
+void scaleVectorWithConstants() {
+    int dims = 1024;
+    int vectors = 200000;
+    float constants = 2;
+    int totalThreads = 8092;
+    int threads = 256;
+    int size = dims * vectors; 
+    float* outputGpu = new float[size];
+    float* output = new float[size];
+    float* input = new float[size];
+    float* scaleMat = new float[1];
+    int inSize[2] = {size ,1};
+    int outSize[1] = {size};
+    size_t freeMem, totalMem;
+    cudaMemGetInfo(&freeMem, &totalMem);
+    cout << "Free VRAM: " << freeMem / (1024*1024) << " MB\n";
+    cout << "Total VRAM: " << totalMem / (1024*1024) << " MB\n";
+    DataBinding::initData(
+        2, 1,
+        inSize,
+        outSize,
+        sizeof(float)
+    );
+    cudaMemGetInfo(&freeMem, &totalMem);
+    cout << "Free VRAM: " << freeMem / (1024*1024) << " MB\n";
+    cout << "Total VRAM: " << totalMem / (1024*1024) << " MB\n";
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dist(-12.0f, 12.0f);
+    for (int i = 0; i < size; i++) {
+        input[i] = dist(gen);
+    }
+    scaleMat[0] = constants;
+    DataBinding::setInput(0, input);
+    DataBinding::setInput(1, scaleMat);
+    cout << "Starting vector addition on GPU..." << std::endl;
+    auto start = std::chrono::high_resolution_clock::now();
+    // for (int i = 0; i < 20; i++) {
+        DataBinding::launchKernel(scaleVec, dim3(totalThreads/threads), dim3(threads), size);
+    // }
+    DataBinding::getOutput(0, outputGpu);
+    auto end   = std::chrono::high_resolution_clock::now();
+    double ms = std::chrono::duration<double, std::milli>(end - start).count();
+    cout << "End vector addition on GPU... " << ms << " ms" << std::endl;
+    cout << "Starting vector addition on CPU..." << std::endl;
+    start = std::chrono::high_resolution_clock::now();
+    
+    for (int i = 0; i < size; i++) {
+        // for(int j = 0; j < vectors; j++)  {
+            output[i] = input[i] * scaleMat[0];
+        // }
+    }
+    auto end_cpu   = std::chrono::high_resolution_clock::now();
+    double ms_cpu = std::chrono::duration<double, std::milli>(end_cpu - start).count();
+    cout << "End vector addition on CPU... " << ms_cpu << " ms" << std::endl;
+    cout << "compare outputs: ";
+    bool correct = true;
+    int count = 0;
+
+    for (int i = 0; i < size; i++) {
+        if (abs(output[i] - outputGpu[i]) > 1e-5) {
+            correct = false;
+            cout << "Mismatch at index " << i << ": CPU = " << output[i] << ", GPU = " << outputGpu[i] << endl;
+//             break;
+            break;
+        }
+        // if(i<100){
+        //     cout << "tesst output " << i << ": CPU = " << output[i] << ", GPU = " << outputGpu[i] << endl;
+        // }
+        // count++;
+        // if (count >= 100) break;
+    }
+    if (correct) {
+        cout << "Outputs match!" << endl;
+    } else {
+        cout << "Outputs do not match!" << endl;
+    }
+    DataBinding::clearData();
+    // delete[] output;   
+    delete[] outputGpu;
+    delete[] input;
+    delete[] output;
+    delete[] scaleMat;
+}
+
+void minLengthVector() {
+    // preset
+    int dims = 200 << 5;
+    int vectors = 8092 << 1;
+    int totalThreads = vectors;
+    int threadsPerBlock = 1024;
+    int blocks = (totalThreads + threadsPerBlock - 1) / threadsPerBlock;
+    int typeSize = sizeof(float);
+    int size = dims * vectors; 
+    float* input = new float[size];
+    float* outputGpu = new float[1];
+    outputGpu[0] = FLT_MAX;
+    float* output = new float[vectors] {0};
+    int inSize[1] = {size};
+    int outSize[1] = {1};
+    size_t freeMem, totalMem;
+    void* args[32];
+    int index = 0;
+    args[index++] = &dims;
+    args[index++] = &vectors;
+    // check GPU info and reserve data
+    cudaMemGetInfo(&freeMem, &totalMem);
+    cout << "Free VRAM: " << freeMem / (1024*1024) << " MB\n";
+    cout << "Total VRAM: " << totalMem / (1024*1024) << " MB\n";
+    DataBinding::initData(
+        1, 1,
+        inSize,
+        outSize,
+        typeSize
+    );
+    cudaMemGetInfo(&freeMem, &totalMem);
+    cout << "Free VRAM: " << freeMem / (1024*1024) << " MB\n";
+    cout << "Total VRAM: " << totalMem / (1024*1024) << " MB\n";
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dist(-5.0f, 5.0f);
+    for (int i = 0; i < size; i++) {
+        input[i] = dist(gen);
+    }
+    cout<< endl;
+    DataBinding::setInput(0, input);
+    DataBinding::setOutput(0, outputGpu);
+    cout << "Starting vector addition on GPU..." << std::endl;
+    
+    ///////////////////////////////////
+    // start GPU acceleration        //
+    ///////////////////////////////////
+
+    auto start = std::chrono::high_resolution_clock::now();
+    // for (int i = 0; i < 20; i++) {
+    DataBinding::launchKernel2(minDistanceVector, dim3(totalThreads/threadsPerBlock), dim3(threadsPerBlock), threadsPerBlock * sizeof(float), args, index);
+    // }
+    DataBinding::getOutput(0, outputGpu);
+    auto end   = std::chrono::high_resolution_clock::now();
+    double ms = std::chrono::duration<double, std::milli>(end - start).count();
+    cout << "End vector addition on GPU... " << ms << " ms" << std::endl;
+    cout << "Starting vector addition on CPU..." << std::endl;
+    ///////////////////////////////////
+    // start CPU processing          //
+    ///////////////////////////////////
+    start = std::chrono::high_resolution_clock::now();
+    
+    for (int i = 0; i < vectors; i++) {
+        int offset = i * dims;
+        for(int j = 0; j < dims; j++)  {
+            output[i] += input[offset + j] * input[offset + j];
+        }
+    }
+    float minCpu = FLT_MAX;
+    int count = 20;
+    for (int i = 0; i < vectors; i++) {
+
+        minCpu = min(minCpu, output[i]);      
+    }
+    cout<< "min: " << minCpu << endl;
+    auto end_cpu   = std::chrono::high_resolution_clock::now();
+    double ms_cpu = std::chrono::duration<double, std::milli>(end_cpu - start).count();
+    cout << "End vector addition on CPU... " << ms_cpu << " ms" << std::endl;
+    cout << "compare outputs: ";
+    bool correct = true;
+
+    if (abs(minCpu - outputGpu[0]) > 1e-3) {
+        correct = false;
+        cout << "Mismatch " << ": CPU = " << minCpu << ", GPU = " << outputGpu[0] << endl;
+    }
+    cout << "outputs " << ": CPU = " << minCpu << ", GPU = " << outputGpu[0] << endl;
+    if (correct) {
+        cout << "✅ Outputs match!" << endl;
+    } else {
+        cout << "❌ Outputs do not match!" << endl;
+    }
+    DataBinding::clearData();
+    delete[] output;   
+    delete[] outputGpu;
+    delete[] input;
+}
+
 }

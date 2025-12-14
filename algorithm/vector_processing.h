@@ -12,4 +12,6 @@ void addVector2();
 void addVector();
 void dotProductVector();
 void addVectorMultipleDims();
+void scaleVectorWithConstants();
+void minLengthVector();
 }
