@@ -1,0 +1,17 @@
+
+#pragma once    
+#include <vector>
+#include "src/cuda/add_vector.cuh"
+#include "src/data_binding/vector_binding.h"
+#include <random>
+#include <chrono>
+using namespace std;
+namespace VectorAlgorithm{
+
+void addVector2();
+void addVector();
+void dotProductVector();
+void addVectorMultipleDims();
+void scaleVectorWithConstants();
+void minLengthVector();
+}
