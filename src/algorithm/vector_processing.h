@@ -1,8 +1,8 @@
 
 #pragma once    
 #include <vector>
-#include "src/cuda/add_vector.cuh"
-#include "src/data_binding/vector_binding.h"
+#include "../cuda/add_vector.cuh"
+#include "../data_binding/vector_binding.h"
 #include <random>
 #include <chrono>
 using namespace std;

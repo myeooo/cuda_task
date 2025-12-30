@@ -1,6 +1,24 @@
 cmake_minimum_required(VERSION 3.18)
 project(test_cuda LANGUAGES CXX CUDA)
 
+# --------------------
+# Compiler settings
+# --------------------
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+# --------------------
+# Dependencies (via vcpkg hoặc conan)
+# --------------------
+find_package(glfw3 CONFIG REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+
+# --------------------
+# Source files
+# --------------------
 file(GLOB CUDA_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/cuda/*.cu"
 )
@@ -12,19 +30,31 @@ file(GLOB CPP_SOURCES
 )
 
 add_executable(app
-    src/main.cpp
-    src/algorithm/vector_processing.cpp
-    ${CUDA_SOURCES}
     ${CPP_SOURCES}
+    ${CUDA_SOURCES}
 )
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(app PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cuda
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data_binding
 )
 
+# --------------------
+# CUDA settings
+# --------------------
 set_target_properties(app PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
-    CUDA_ARCHITECTURES "75"
+    CUDA_ARCHITECTURES "75"          # Nếu GPU khác: 61, 70, 75, 86, 89...
 )
+
+# --------------------
+# Link libraries
+# --------------------
+target_link_libraries(app PRIVATE
+    glfw
+    GLEW::GLEW
+    imgui::imgui
+)
+
