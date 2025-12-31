@@ -67,7 +67,7 @@ int main() {
         glViewport(0, 0, context->width*2/3, context->height);
 
         // Clear nền xanh để test
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // <--- SAU NÀY SẼ VẼ SCENE 3D, CAMERA, MESH TẠI ĐÂY
