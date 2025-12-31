@@ -11,9 +11,27 @@
 #include "context/globalContext.h"
 #include "imgui/section/imgui3DSectionController.h"
 #include "imgui/section/imgui3DSection.h"
+#include "utils/draw_utils.h"
+#include "3Dwindow/camera/camera.h"
 
 using namespace std;
+double lastX, lastY;
+bool firstMouse = true;
+Camera camera({0,0,10});
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // đảo ngược vì hệ toạ độ màn hình
+    lastX = xpos;
+    lastY = ypos;
 
+    camera.processMouseMovement(xoffset, yoffset);
+}
 
 bool open = true;
 ImGuiWindowFlags windowFlag = ImGuiWindowFlags_NoResize  | ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_NoInputs| ImGuiWindowFlags_NoNav;
@@ -23,6 +41,8 @@ int main() {
     int numbTest = 1;
     glfwInit();
     GLFWwindow* window = glfwCreateWindow(context->width, context->height, "4D Viz Start", NULL, NULL);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);  
+    glfwSetCursorPosCallback(window, mouseCallback);
     glfwMakeContextCurrent(window);
     glewInit();
 
@@ -59,8 +79,15 @@ int main() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     Imgui3DSectionController controller;
     Imgui3DSection threeDsection;
-
     while (!glfwWindowShouldClose(window)) {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera.processKeyboard(GLFW_KEY_W);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera.processKeyboard(GLFW_KEY_S);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera.processKeyboard(GLFW_KEY_A);
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.processKeyboard(GLFW_KEY_D);
+
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera.position.y += camera.speed;
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) camera.position.y -= camera.speed;
+        
         glfwPollEvents();
         // === RENDER 3D INTO FBO ===
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -71,6 +98,26 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // <--- SAU NÀY SẼ VẼ SCENE 3D, CAMERA, MESH TẠI ĐÂY
+        
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+
+        float aspect = (context->width * 2.0f/3) / (float)context->height;
+        glm::mat4 proj = camera.getProjectionMatrix(aspect, 45.0f);
+        glm::mat4 view = camera.getViewMatrix();
+
+        // chuyển glm -> OpenGL matrix
+        glLoadMatrixf(&proj[0][0]);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadMatrixf(&view[0][0]);
+
+        // ===== VẼ HAI HÌNH TRÒN =====
+        glColor3f(1.0f, 1.0f, 1.0f); 
+        DrawUtils::drawCircle(0.0f, 0.0f, 3.0f); // hình tròn đầu tiên
+
+        glColor3f(1.0f, 0.0f, 0.0f);
+        DrawUtils::drawCircle(4.0f, 0.0f, 3.0f); // hình thứ hai cách 4 đơn vị trên trục X
+
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         ImGui_ImplOpenGL3_NewFrame();

@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
 
 class Camera {
 public:
@@ -14,13 +15,11 @@ public:
     Camera(glm::vec3 start = {0, 0, 3})
         : position(start), yaw(-90.0f), pitch(0.0f) {}
 
-    glm::mat4 getViewMatrix() {
-        glm::vec3 front;
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front.y = sin(glm::radians(pitch));
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        return glm::lookAt(position, position + glm::normalize(front), {0, 1, 0});
-    }
+    glm::mat4 getViewMatrix();
+    glm::mat4 getProjectionMatrix(float aspect, float fov = 45.0f);
+    void processMouseMovement(float xoffset, float yoffset);
+
+    void processKeyboard(int keydirection);
 };
 
 #endif
