@@ -30,7 +30,7 @@ file(GLOB CPP_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/data_binding/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/imgui/section/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/context/*.cpp"
-
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
 
 )
 
@@ -46,6 +46,7 @@ target_include_directories(app PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data_binding
     ${CMAKE_CURRENT_SOURCE_DIR}/src/imgui/section
     ${CMAKE_CURRENT_SOURCE_DIR}/src/context
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
 )
 
 # --------------------
