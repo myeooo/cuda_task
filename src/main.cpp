@@ -8,7 +8,7 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include "context/globalContext.h"
+#include "app/globalContext.h"
 #include "imgui/section/imgui3DSectionController.h"
 #include "imgui/section/imgui3DSection.h"
 #include "utils/draw_utils.h"

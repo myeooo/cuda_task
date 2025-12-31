@@ -1,7 +1,7 @@
 #include "imgui3DSection.h"
 #include "imgui.h"
 // Khởi tạo biến static
-#include "context/globalContext.h"
+#include "app/globalContext.h"
 
 
 void Imgui3DSection::show() {

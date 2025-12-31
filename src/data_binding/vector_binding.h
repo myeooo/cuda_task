@@ -1,5 +1,5 @@
 #pragma once
-#include "../cuda/add_vector.cuh"
+#include "../compute/add_vector.cuh"
 #include <iostream>
 using namespace std;
 namespace DataBinding {
