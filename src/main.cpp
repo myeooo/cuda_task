@@ -41,7 +41,7 @@ int main() {
     int numbTest = 1;
     glfwInit();
     GLFWwindow* window = glfwCreateWindow(context->width, context->height, "4D Viz Start", NULL, NULL);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);  
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwMakeContextCurrent(window);
     glewInit();
@@ -80,10 +80,10 @@ int main() {
     Imgui3DSectionController controller;
     Imgui3DSection threeDsection;
     while (!glfwWindowShouldClose(window)) {
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera.processKeyboard('W');
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera.processKeyboard('S');
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera.processKeyboard('A');
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.processKeyboard('D');
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera.processKeyboard(GLFW_KEY_W);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera.processKeyboard(GLFW_KEY_S);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera.processKeyboard(GLFW_KEY_A);
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.processKeyboard(GLFW_KEY_D);
 
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera.position.y += camera.speed;
         if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) camera.position.y -= camera.speed;
