@@ -1,29 +1,55 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#include "Application.h"
 
-#include "Window.h"
-#include "render/camera.h"
+bool Application::init()
+{
+    glfwInit();
+    window.init();
+    imgui.init();
+    return false;
+}
 
-class Application {
-public:
-    bool init();        
-    void run();         
-    void shutdown();    
+void Application::run()
+{
 
-private:
-    void processInput(); 
-    void update();       
-    void render();      
+}
 
-    // thành phần lõi
-    Window window;
-    Camera camera;
-    Framebuffer framebuffer;
-    Renderer renderer;
-    ImGuiLayer imgui;
+void Application::shutdown()
+{
+    glfwDestroyWindow(window.window);
+}
 
-    // dữ liệu compute (để chuyển cho CUDA)
-    std::vector<float> simulationData;
-};
+void Application::processInput()
+{
+    glfwSetCursorPosCallback(window.window, mouseCallback);
 
-#endif // APPLICATION_H
+}
+
+void Application::update()
+{
+}
+
+void Application::render()
+{
+}
+
+void Application::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+    if (app) {
+        app->onMouseMove(xpos, ypos);
+    }
+}
+
+void Application::onMouseMove(double xpos, double ypos) {
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; 
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.processMouseMovement(xoffset, yoffset);
+}

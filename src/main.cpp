@@ -9,29 +9,15 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include "app/globalContext.h"
-#include "imgui/section/imgui3DSectionController.h"
-#include "imgui/section/imgui3DSection.h"
+// #include "imgui/section/imgui3DSectionController.h"
+// #include "imgui/section/imgui3DSection.h"
 #include "utils/draw_utils.h"
-#include "3Dwindow/camera/camera.h"
+// #include "3Dwindow/camera/camera.h"
 
 using namespace std;
 double lastX, lastY;
 bool firstMouse = true;
 Camera camera({0,0,10});
-void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
-    if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-    
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // đảo ngược vì hệ toạ độ màn hình
-    lastX = xpos;
-    lastY = ypos;
-
-    camera.processMouseMovement(xoffset, yoffset);
-}
 
 bool open = true;
 ImGuiWindowFlags windowFlag = ImGuiWindowFlags_NoResize  | ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_NoInputs| ImGuiWindowFlags_NoNav;

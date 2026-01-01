@@ -44,7 +44,7 @@ add_executable(app
 
 target_include_directories(app PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/compute
+${CMAKE_CURRENT_SOURCE_DIR}/src/compute
     ${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data_binding
     ${CMAKE_CURRENT_SOURCE_DIR}/src/app
