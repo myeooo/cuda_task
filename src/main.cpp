@@ -9,6 +9,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include "app/globalContext.h"
+#include "app/Application.h"
+
 // #include "imgui/section/imgui3DSectionController.h"
 // #include "imgui/section/imgui3DSection.h"
 #include "utils/draw_utils.h"
@@ -23,23 +25,15 @@ bool open = true;
 ImGuiWindowFlags windowFlag = ImGuiWindowFlags_NoResize  | ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_NoInputs| ImGuiWindowFlags_NoNav;
 ImGuiChildFlags childFlag = ImGuiChildFlags_Borders;
 int main() {
-    auto context = GlobalContext::getGlobalContext();
+    Application app;
+    app.init();
+    
     int numbTest = 1;
-    glfwInit();
-    GLFWwindow* window = glfwCreateWindow(context->width, context->height, "4D Viz Start", NULL, NULL);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);  
-    glfwSetCursorPosCallback(window, mouseCallback);
-    glfwMakeContextCurrent(window);
-    glewInit();
+    // glfwSetCursorPosCallback(window, mouseCallback);
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
     // for (int i = 0 ; i < numbTest; i ++){
     //     VectorAlgorithm::scaleVectorWithConstants();
     // }
-    glfwSetWindowSizeLimits(window, 1280, 720, GLFW_DONT_CARE,GLFW_DONT_CARE);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0,0});
     GLuint fbo, rbo;
     glGenFramebuffers(1, &fbo);

@@ -2,10 +2,14 @@
 
 bool Application::init()
 {
-    glfwInit();
+    if(!glfwInit()) {
+        return false;
+    }
+    auto context = GlobalContext::getGlobalContext();
     window.init();
     imgui.init();
-    return false;
+    processInput();
+    return true;
 }
 
 void Application::run()

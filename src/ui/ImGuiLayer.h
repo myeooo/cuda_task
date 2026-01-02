@@ -5,7 +5,8 @@
 class ImGuiLayer {
 public:
     bool init();        
-
+    void render();         
+    void shutdown();    
 };
 
 #endif // IMGUILAYER_H

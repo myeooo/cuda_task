@@ -6,7 +6,7 @@
 #include "ui/ImGuiLayer.h"
 #include "render/Framebuffer.h"
 #include "render/Renderer.h"
-
+#include "globalContext.h"
 class Application {
 public:
     bool init();        

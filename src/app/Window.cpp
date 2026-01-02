@@ -8,7 +8,6 @@ bool Window::init()
     glewInit();
     glfwSetWindowSizeLimits(window, 1280, 720, GLFW_DONT_CARE,GLFW_DONT_CARE);
 
-    glfwSetCursorPosCallback(window, mouseCallback);
     return false;
 }
 
