@@ -7,25 +7,25 @@
 #include "render/Framebuffer.h"
 #include "render/Renderer.h"
 #include "globalContext.h"
-class Application {
+class Application
+{
 public:
-    bool init();        
-    void run();         
-    void shutdown();    
+    bool init();
+    void run();
+    void shutdown();
+    ~Application();
 
 private:
-    bool firstMouse = true;
-    double lastX, lastY;
-    void processInput(); 
-    void update();       
-    void render();   
-    void onMouseMove(double xpos, double ypos);   
-    static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
-    Window window;
-    Camera camera;
-    Framebuffer framebuffer;
-    Renderer renderer;
-    ImGuiLayer imgui;
+
+    void processInput();
+    void update();
+    void render();
+    void onMouseMove(double xpos, double ypos);
+    Window m_Window;
+    Camera m_Camera;
+    Renderer m_Renderer;
+    ImGuiLayer m_ImGui;
+    bool m_Running = true;
 
 };
 

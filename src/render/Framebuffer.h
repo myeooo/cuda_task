@@ -4,8 +4,12 @@
 
 class Framebuffer {
 public:
-    bool init();        
+    bool init(int width, int height);
+    void bind();
+    void unbind();
 
+    unsigned int getColorTexture() const;
+    void resize(int width, int height);
+    void shutdown();
 };
-
 #endif // FRAMEBUFFER_H
