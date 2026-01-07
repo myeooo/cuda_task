@@ -79,10 +79,11 @@ void Application::update()
 
 void Application::render()
 {
-    m_Renderer.beginFrame();
-
+    auto context = GlobalContext::getGlobalContext();
+    m_Renderer.beginFrame();    
+    glfwGetWindowSize(m_Window.getNativeWindow(), &context->width, &context->height);
     m_ImGui.begin();
-    m_ImGui.render();
+    m_ImGui.render(m_Renderer.getSceneFramebuffer()->getColorTexture());
     m_ImGui.end();
 
     m_Renderer.endFrame();

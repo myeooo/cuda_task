@@ -20,6 +20,8 @@ public:
     bool shouldClose() const;
 
     GLFWwindow* getNativeWindow() const;
+    int width() const { return m_Width; }
+    int height() const { return m_Height; }
 
 private:
     GLFWwindow* m_Window = nullptr;
