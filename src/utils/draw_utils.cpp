@@ -2,8 +2,10 @@
 #ifndef DRAW_UTILS_H
 #define DRAW_UTILS_H
 
+#include "draw_utils.h"
 #include <GL/glew.h>
 #include <cmath>
+namespace DrawUtils {
 
 void drawCircle(float centerX, float centerY, float radius) {
     int segments = 64; // càng cao càng mượt
@@ -16,5 +18,5 @@ void drawCircle(float centerX, float centerY, float radius) {
     }
     glEnd();
 }
-
+}
 #endif

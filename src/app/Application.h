@@ -7,6 +7,8 @@
 #include "render/Framebuffer.h"
 #include "render/Renderer.h"
 #include "globalContext.h"
+#include "utils/draw_utils.h"
+
 class Application
 {
 public:

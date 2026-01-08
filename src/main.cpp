@@ -1,19 +1,9 @@
 #include <iostream>
-#include "algorithm/vector_processing.h"
-#include <vector>
-#include <random>
-#include <chrono>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 #include "app/globalContext.h"
 #include "app/Application.h"
 
 // #include "imgui/section/imgui3DSectionController.h"
 // #include "imgui/section/imgui3DSection.h"
-#include "utils/draw_utils.h"
 // #include "3Dwindow/camera/camera.h"
 
 using namespace std;
@@ -125,6 +115,7 @@ using namespace std;
 
 // Main application entry point
 int main() {
+    auto context = GlobalContext::getGlobalContext();
     Application app;
     if (!app.init()) {
         std::cerr << "Failed to initialize application\n";

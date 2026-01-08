@@ -1,6 +1,6 @@
 #include "Application.h"
 #include <iostream>
-
+using namespace std;
 namespace {
     bool s_FirstMouse = true;
     double s_LastX = 0.0;
@@ -75,6 +75,24 @@ void Application::processInput()
 
 void Application::update()
 {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    float aspect = (m_Window.width() * 2.0f/3) / (float)m_Window.height();
+    glm::mat4 proj = m_Camera.getProjectionMatrix(aspect, 45.0f);
+    glm::mat4 view = m_Camera.getViewMatrix();
+
+    // chuyển glm -> OpenGL matrix
+    glLoadMatrixf(&proj[0][0]);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(&view[0][0]);
+
+    // ===== VẼ HAI HÌNH TRÒN =====
+    glColor3f(1.0f, 1.0f, 1.0f); 
+    DrawUtils::drawCircle(0.0f, 0.0f, 3.0f); 
+
+    glColor3f(1.0f, 0.0f, 0.0f);
+    DrawUtils::drawCircle(4.0f, 0.0f, 3.0f);
 }
 
 void Application::render()
@@ -83,7 +101,9 @@ void Application::render()
     m_Renderer.beginFrame();    
     glfwGetWindowSize(m_Window.getNativeWindow(), &context->width, &context->height);
     m_ImGui.begin();
-    m_ImGui.render(m_Renderer.getSceneFramebuffer()->getColorTexture());
+    auto texColor = m_Renderer.getSceneFramebuffer()->getColorTexture();
+    cout << "Rendering with texColor: " << texColor << endl;
+    m_ImGui.render(texColor);
     m_ImGui.end();
 
     m_Renderer.endFrame();

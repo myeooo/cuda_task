@@ -12,7 +12,7 @@ public:
     float speed = 0.05f;
     float sensitivity = 0.1f;
 
-    Camera(glm::vec3 start = {0, 0, 3})
+    Camera(glm::vec3 start = {0, 0, 10})
         : position(start), yaw(-90.0f), pitch(0.0f) {}
 
     glm::mat4 getViewMatrix();

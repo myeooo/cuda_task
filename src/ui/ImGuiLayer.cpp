@@ -37,7 +37,7 @@ void ImGuiLayer::render(GLuint texColor)
     ImGui::Text("OpenGL + ImGui running!");
     section.show(texColor);
     ImGui::SameLine();
-    controller.show();
+    controller.show(texColor);
 }
 void ImGuiLayer::end()
 {
