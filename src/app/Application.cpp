@@ -80,15 +80,19 @@ void Application::update()
 
 void Application::render()
 {
-    auto context = GlobalContext::getGlobalContext();
+    auto ctx = GlobalContext::getGlobalContext();
+    glfwGetWindowSize(m_Window.getNativeWindow(), &ctx->width, &ctx->height);
 
     // ===== PHASE 1: render scene vào FBO =====
-    m_Renderer.beginFrame();
+    m_Renderer.beginFrame(); // bind FBO + viewport
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    float aspect = (context->width * 2.0f/3) / (float)context->height;
+    float aspect =
+        (float)ctx->width *2 /3 /
+        (float)ctx->height;
+
     glm::mat4 proj = m_Camera.getProjectionMatrix(aspect, 45.0f);
     glm::mat4 view = m_Camera.getViewMatrix();
 
@@ -96,22 +100,18 @@ void Application::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(&view[0][0]);
 
-    glColor3f(1,1,1);
     DrawUtils::drawCircle(0,0,3);
-
-    glColor3f(1,0,0);
     DrawUtils::drawCircle(4,0,3);
 
-    m_Renderer.endFrame();   // ❗ UNBIND FBO TRƯỚC
+    m_Renderer.endFrame(); // ❗ UNBIND FBO
 
-    // ===== PHASE 2: render ImGui vào window =====
-    glfwGetWindowSize(m_Window.getNativeWindow(), &context->width, &context->height);
-
+    // ===== PHASE 2: render ImGui =====
     m_ImGui.begin();
-    m_ImGui.render(m_Renderer.getSceneFramebuffer()->getColorTexture());
+    m_ImGui.render(
+        m_Renderer.getSceneFramebuffer()->getColorTexture()
+    );
     m_ImGui.end();
 }
-
 
 void Application::onMouseMove(double xpos, double ypos) {
     if (s_FirstMouse) {
