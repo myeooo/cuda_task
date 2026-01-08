@@ -75,38 +75,41 @@ void Application::processInput()
 
 void Application::update()
 {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
 
-    float aspect = (m_Window.width() * 2.0f/3) / (float)m_Window.height();
-    glm::mat4 proj = m_Camera.getProjectionMatrix(aspect, 45.0f);
-    glm::mat4 view = m_Camera.getViewMatrix();
-
-    // chuyển glm -> OpenGL matrix
-    glLoadMatrixf(&proj[0][0]);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(&view[0][0]);
-
-    // ===== VẼ HAI HÌNH TRÒN =====
-    glColor3f(1.0f, 1.0f, 1.0f); 
-    DrawUtils::drawCircle(0.0f, 0.0f, 3.0f); 
-
-    glColor3f(1.0f, 0.0f, 0.0f);
-    DrawUtils::drawCircle(4.0f, 0.0f, 3.0f);
 }
 
 void Application::render()
 {
     auto context = GlobalContext::getGlobalContext();
-    m_Renderer.beginFrame();    
-    glfwGetWindowSize(m_Window.getNativeWindow(), &context->width, &context->height);
-    m_ImGui.begin();
-    auto texColor = m_Renderer.getSceneFramebuffer()->getColorTexture();
-    cout << "Rendering with texColor: " << texColor << endl;
-    m_ImGui.render(texColor);
-    m_ImGui.end();
 
-    m_Renderer.endFrame();
+    // ===== PHASE 1: render scene vào FBO =====
+    m_Renderer.beginFrame();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    float aspect = (context->width * 2.0f/3) / (float)context->height;
+    glm::mat4 proj = m_Camera.getProjectionMatrix(aspect, 45.0f);
+    glm::mat4 view = m_Camera.getViewMatrix();
+
+    glLoadMatrixf(&proj[0][0]);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(&view[0][0]);
+
+    glColor3f(1,1,1);
+    DrawUtils::drawCircle(0,0,3);
+
+    glColor3f(1,0,0);
+    DrawUtils::drawCircle(4,0,3);
+
+    m_Renderer.endFrame();   // ❗ UNBIND FBO TRƯỚC
+
+    // ===== PHASE 2: render ImGui vào window =====
+    glfwGetWindowSize(m_Window.getNativeWindow(), &context->width, &context->height);
+
+    m_ImGui.begin();
+    m_ImGui.render(m_Renderer.getSceneFramebuffer()->getColorTexture());
+    m_ImGui.end();
 }
 
 
