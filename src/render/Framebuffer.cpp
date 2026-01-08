@@ -5,7 +5,6 @@
 using namespace std;
 bool Framebuffer::init(int width, int height)
 {
-    cout << "Initializing FBO with size: " << width << "x" << height << endl;
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glGenTextures(1, &texColor);
@@ -28,19 +27,19 @@ bool Framebuffer::init(int width, int height)
 
 void Framebuffer::bind()
 {
-    cout << "Binding FBO: " << fbo << endl;
+    // cout << "Binding FBO: " << fbo << endl;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 }
 
 void Framebuffer::unbind()
 {
-    cout << "Unbinding FBO: " << fbo << endl;
+    // cout << "Unbinding FBO: " << fbo << endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 unsigned int Framebuffer::getColorTexture() const
 {
-    cout << "Getting color texture: " << texColor << endl;
+    // cout << "Getting color texture: " << texColor << endl;
     return texColor;
 }
 

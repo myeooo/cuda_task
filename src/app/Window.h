@@ -14,14 +14,14 @@ public:
     bool init();
     void shutdown();
 
-    void pollEvents();
     void swapBuffers();
-
-    bool shouldClose() const;
-
+    void pollEvents();
+    bool shouldClose() const;   
+    GLFWwindow* native() const;
     GLFWwindow* getNativeWindow() const;
     int width() const { return m_Width; }
     int height() const { return m_Height; }
+    void onResize(int width, int height);
 
 private:
     GLFWwindow* m_Window = nullptr;

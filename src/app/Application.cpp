@@ -21,6 +21,14 @@ bool Application::init()
         return false;
     }
     glfwSetWindowUserPointer(m_Window.getNativeWindow(), this);
+    glfwSetFramebufferSizeCallback(
+        m_Window.getNativeWindow(),
+        [](GLFWwindow* win, int w, int h)
+        {
+            auto* window = static_cast<Window*>(glfwGetWindowUserPointer(win));
+            if (window) window->onResize(w, h);
+        }
+    );
 
     glfwSetCursorPosCallback(
         m_Window.getNativeWindow(),
@@ -34,6 +42,10 @@ bool Application::init()
             }
         }
     );
+    if (!m_Renderer.init()) {
+        std::cerr << "Failed to init Renderer\n";
+        return false;
+    }
     m_ImGui.init(m_Window.getNativeWindow());
     processInput();
     return true;
@@ -80,30 +92,9 @@ void Application::update()
 
 void Application::render()
 {
-    auto ctx = GlobalContext::getGlobalContext();
-    glfwGetWindowSize(m_Window.getNativeWindow(), &ctx->width, &ctx->height);
 
     // ===== PHASE 1: render scene vào FBO =====
-    m_Renderer.beginFrame(); // bind FBO + viewport
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    float aspect =
-        (float)ctx->width *2 /3 /
-        (float)ctx->height;
-
-    glm::mat4 proj = m_Camera.getProjectionMatrix(aspect, 45.0f);
-    glm::mat4 view = m_Camera.getViewMatrix();
-
-    glLoadMatrixf(&proj[0][0]);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(&view[0][0]);
-
-    DrawUtils::drawCircle(0,0,3);
-    DrawUtils::drawCircle(4,0,3);
-
-    m_Renderer.endFrame(); // ❗ UNBIND FBO
+    m_Renderer.renderScene(m_Camera, m_Window.width(), m_Window.height());
 
     // ===== PHASE 2: render ImGui =====
     m_ImGui.begin();
@@ -119,7 +110,6 @@ void Application::onMouseMove(double xpos, double ypos) {
         s_LastY = ypos;
         s_FirstMouse = false;
     }
-
     float xoffset = xpos - s_LastX;
     float yoffset = s_LastY - ypos; 
     s_LastX = xpos;

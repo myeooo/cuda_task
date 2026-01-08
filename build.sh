@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+cp src/glsl/ build/Debug/ -r
 mkdir -p build
 cd build
 cmake .. -DCMAKE_TOOLCHAIN_FILE="D:/vcpkg/scripts/buildsystems/vcpkg.cmake"

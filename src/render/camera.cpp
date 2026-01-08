@@ -1,5 +1,6 @@
 #include "camera.h"
-
+#include <iostream>
+using namespace std;
 glm::mat4 Camera::getViewMatrix()
 {
     glm::vec3 front;
@@ -16,6 +17,7 @@ glm::mat4 Camera::getProjectionMatrix(float aspect, float fov)
 }
 void Camera::processMouseMovement(float xoffset, float yoffset)
 {
+
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 

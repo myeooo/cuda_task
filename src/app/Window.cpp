@@ -1,5 +1,6 @@
 #include "Window.h"
 #include <iostream>
+#include "globalContext.h"
 
 bool Window::init()
 {
@@ -8,17 +9,18 @@ bool Window::init()
         m_Height,
         m_Title.c_str(),
         nullptr,
-        nullptr
-    );
+        nullptr);
 
-    if (!m_Window) {
+    if (!m_Window)
+    {
         std::cerr << "Failed to create GLFW window\n";
         return false;
     }
 
     glfwMakeContextCurrent(m_Window);
 
-    if (glewInit() != GLEW_OK) {
+    if (glewInit() != GLEW_OK)
+    {
         std::cerr << "Failed to init GLEW\n";
         return false;
     }
@@ -31,7 +33,8 @@ bool Window::init()
 
 void Window::shutdown()
 {
-    if (m_Window) {
+    if (m_Window)
+    {
         glfwDestroyWindow(m_Window);
         m_Window = nullptr;
     }
@@ -50,6 +53,7 @@ Window::~Window()
 void Window::pollEvents()
 {
     glfwPollEvents();
+    glfwGetWindowSize(m_Window, &m_Width, &m_Height);
 }
 
 void Window::swapBuffers()
@@ -62,7 +66,19 @@ bool Window::shouldClose() const
     return glfwWindowShouldClose(m_Window);
 }
 
-GLFWwindow* Window::getNativeWindow() const
+GLFWwindow *Window::native() const
 {
     return m_Window;
+}
+
+GLFWwindow *Window::getNativeWindow() const
+{
+    return m_Window;
+}
+
+void Window::onResize(int width, int height)
+{
+
+    m_Width = width;
+    m_Height = height;
 }

@@ -33,7 +33,8 @@ file(GLOB CPP_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/render/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
-
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/render/circleRenderer/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/render/shader/*.cpp"
 
 )
 
@@ -44,7 +45,7 @@ add_executable(app
 
 target_include_directories(app PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-${CMAKE_CURRENT_SOURCE_DIR}/src/compute
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/compute
     ${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data_binding
     ${CMAKE_CURRENT_SOURCE_DIR}/src/app
@@ -52,6 +53,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/src/compute
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
     ${CMAKE_CURRENT_SOURCE_DIR}/src/render
     ${CMAKE_CURRENT_SOURCE_DIR}/src/context
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/render/circleRenderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/render/shader
 )
 
 # --------------------
