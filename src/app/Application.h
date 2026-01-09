@@ -17,7 +17,7 @@ public:
     ~Application();
 
 private:
-
+    void updateCursorMode();
     void processInput();
     void update();
     void render();

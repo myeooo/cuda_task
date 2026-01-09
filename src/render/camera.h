@@ -13,14 +13,19 @@ public:
     float speed = 0.05f;
     float sensitivity = 0.1f;
 
-    Camera(glm::vec3 start = {0, 0, 10})
-        : position(start), yaw(-90.0f), pitch(0.0f) {}
+    Camera(glm::vec3 start = {0, 0, 10});
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix(float aspect, float fov = 45.0f);
     void processMouseMovement(float xoffset, float yoffset);
 
     void processKeyboard(int keydirection);
+    void resetCamera();
+
+    glm::vec3 m_basePosition;
+    float m_baseYaw;
+    float m_basePitch;
+    float m_baseSensitivity;
 };
 
 #endif

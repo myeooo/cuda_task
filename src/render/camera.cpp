@@ -1,6 +1,24 @@
 #include "camera.h"
 #include <iostream>
 using namespace std;
+Camera::Camera(glm::vec3 start)
+    : position(start),
+      yaw(-90.0f),
+      pitch(0.0f),
+      m_basePosition(start),
+      m_baseYaw(-90.0f),
+      m_basePitch(0.0f),
+      m_baseSensitivity(sensitivity)
+{
+}
+void Camera::resetCamera()
+{
+    position = m_basePosition;
+    yaw = m_baseYaw;
+    pitch = m_basePitch;
+    sensitivity = m_baseSensitivity;
+}
+
 glm::mat4 Camera::getViewMatrix()
 {
     glm::vec3 front;
@@ -47,3 +65,5 @@ void Camera::processKeyboard(int keydirection)
     if (keydirection == GLFW_KEY_D)
         position += right * speed;
 }
+
+

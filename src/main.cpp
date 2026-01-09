@@ -2,10 +2,6 @@
 #include "app/globalContext.h"
 #include "app/Application.h"
 
-// #include "imgui/section/imgui3DSectionController.h"
-// #include "imgui/section/imgui3DSection.h"
-// #include "3Dwindow/camera/camera.h"
-
 using namespace std;
 
 int main() {

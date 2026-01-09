@@ -1,5 +1,6 @@
 #include "Application.h"
 #include <iostream>
+#include "globalContext.h"
 using namespace std;
 namespace {
     bool s_FirstMouse = true;
@@ -34,6 +35,7 @@ bool Application::init()
         m_Window.getNativeWindow(),
         [](GLFWwindow* window, double xpos, double ypos)
         {
+           
             auto* app = static_cast<Application*>(
                 glfwGetWindowUserPointer(window)
             );
@@ -80,21 +82,67 @@ Application::~Application()
 
 void Application::processInput()
 {
+    GlobalContext* context = GlobalContext::getGlobalContext();
+    GLFWwindow* win = m_Window.getNativeWindow();
     if (glfwGetKey(m_Window.getNativeWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        m_Running = false;
+        context->focus3DView = false;
+        
     }
+    if(context->resetCamera) {
+        m_Camera.resetCamera();
+        context->resetCamera = false;
+    }   
+    if (!context->focus3DView)
+        return;
+    m_Camera.speed = context->moveRate;
+    if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
+        m_Camera.processKeyboard(GLFW_KEY_W);
+
+    if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
+        m_Camera.processKeyboard(GLFW_KEY_S);
+
+    if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
+        m_Camera.processKeyboard(GLFW_KEY_A);
+
+    if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
+        m_Camera.processKeyboard(GLFW_KEY_D);
+
+    if (glfwGetKey(win, GLFW_KEY_SPACE) == GLFW_PRESS)
+        m_Camera.position.y += m_Camera.speed;
+
+    if (glfwGetKey(win, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        m_Camera.position.y -= m_Camera.speed;
 }
 
 void Application::update()
 {
-
+    updateCursorMode();
 }
 
+void Application::updateCursorMode()
+{
+    GlobalContext* context = GlobalContext::getGlobalContext();
+
+    if (context->focus3DView) {
+        glfwSetInputMode(
+            m_Window.getNativeWindow(),
+            GLFW_CURSOR,
+            GLFW_CURSOR_DISABLED
+        );
+    } else {
+        glfwSetInputMode(
+            m_Window.getNativeWindow(),
+            GLFW_CURSOR,
+            GLFW_CURSOR_NORMAL
+        );
+        
+    }
+}
 void Application::render()
 {
 
     // ===== PHASE 1: render scene vào FBO =====
-    m_Renderer.renderScene(m_Camera, m_Window.width(), m_Window.height());
+    m_Renderer.renderScene(m_Camera, m_Window.width()*2/3, m_Window.height());
 
     // ===== PHASE 2: render ImGui =====
     m_ImGui.begin();
@@ -105,6 +153,12 @@ void Application::render()
 }
 
 void Application::onMouseMove(double xpos, double ypos) {
+     auto context = GlobalContext::getGlobalContext(); 
+    if (!context->focus3DView){
+        s_LastX = xpos;
+        s_LastY = ypos;
+        return;
+    }
     if (s_FirstMouse) {
         s_LastX = xpos;
         s_LastY = ypos;
